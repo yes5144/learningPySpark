@@ -69,8 +69,57 @@ print "#"*30,"\033[32mthis is tuple rows\033[0m","#"*30
 print rows
 
 ```
+### this is a python script read data from TiDB and insert into mysql
+```
+#!/usr/bin/env python
+# coding: utf8
+# 1006793841@qq.com
+#
+from pyspark.sql import SparkSession
+import pytispark.pytispark as pti
+
+spark = SparkSession.builder.master("spark://192.168.204.52:7077").appName("save_to_tidb").getOrCreate()
+ti = pti.TiContext(spark)
+ti.tidbMapDatabase("tpch_001")
+
+#spark.sql("SELECT * FROM `CUSTOMER` where C_CUSTKEY <10").show()
+df = spark.sql("SELECT CURRENT_DATE as commit_date, sum(C_ACCTBAL) FROM `CUSTOMER`")
+
+def write_tidb(df):
+    df.write.mode("append").format("jdbc").options(
+		url='jdbc:mysql://192.168.204.50:4000/test',
+		useSSL=False,
+		user='root',
+		password='',
+		dbtable="insert_test",   # 表名
+		batchsize="100",
+		isolationLevel= "NONE").save()
+
+if __name__ == "__main__":
+    write_tidb(df)
+
+	
+##
+##
+#  脚本需要在Spark集群节点上执行
+#  
+#  1，安装 Spark集群并修改相关配置文件conf/ slaves, spark-default.conf, spark-env.sh
+#  2，pip install pytispark
+#  3，下载tispark-0.1.0-SNAPSHOT-jar-with-dependencies.jar 和mysql-connector-java-5.1.44.jar
+#  4，
+
+```
+
 
 ## what will be the next ??? 
 ## see you tomorrow
+
+
+
+
+
+
+
+
 
 
