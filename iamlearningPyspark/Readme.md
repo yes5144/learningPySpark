@@ -110,16 +110,9 @@ if __name__ == "__main__":
 
 ```
 
+[pingcap官方的tispark示例](https://github.com/ilovesoup/tpch/tree/master/sparksql)
 
 ## what will be the next ??? 
 ## see you tomorrow
-
-
-
-
-
-
-
-
 
 
